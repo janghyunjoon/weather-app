@@ -4,6 +4,7 @@ import WeatherCard from './components/WeatherCard'
 import { useState,useRef,useEffect } from 'react'
 import { fetchCoordinates } from './api/geo'
 import { fetchWeatherByCoords } from './api/weather'
+import { getColorByWeatherId } from './api/bgColor'
 function App() {
 
   const [city, setCity]=useState('seoul')
@@ -11,6 +12,9 @@ function App() {
   const [loading, setLoading]=useState(false)
   const [err, setErr]=useState('')
   const inputRef =useRef(null)
+  const bg = weather?.weather?.[0]?.id
+    ? getColorByWeatherId(weather.weather[0].id)
+    : 'linear-gradient(135deg, #f9f9 0%, #F1F5F9 100%)';
 
   useEffect(()=>{
     inputRef.current.focus()
@@ -48,6 +52,7 @@ function App() {
   }
 
   return (
+    <section style={{ background: bg, minHeight: '100vh', transition: 'background .3s ease' }}>
     <div className='app'>
       <h1>***의 날씨앱</h1>
       <div className="input-wrap">
@@ -66,6 +71,7 @@ function App() {
       {loading && <p className='info'>불러오는중...</p>}
       <WeatherCard weather={weather}/>
     </div>
+    </section>
   )
 }
 
